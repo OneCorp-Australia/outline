@@ -295,6 +295,19 @@ const embeds: EmbedDescriptor[] = [
     icon: <Img src="/images/figma.png" alt="Figma" />,
   }),
   new EmbedDescriptor({
+    id: "fireflies",
+    title: "Fireflies",
+    keywords: "video meeting transcript audio recording",
+    regexMatch: [
+      new RegExp(
+        "^https?://(?:share|app)\\.fireflies\\.ai/(?:embed/meetings|meetings|view)/([\\w-]+)"
+      ),
+    ],
+    transformMatch: (matches: RegExpMatchArray) =>
+      `https://share.fireflies.ai/embed/meetings/${matches[1]}`,
+    icon: <Img src="/images/fireflies.png" alt="Fireflies" />,
+  }),
+  new EmbedDescriptor({
     id: "framer",
     title: "Framer",
     keywords: "design prototyping",
