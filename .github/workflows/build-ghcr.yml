@@ -1,6 +1,6 @@
 name: Build & publish to GHCR
 
-# Builds the OneCorp custom Outline image (with Fireflies embed) and pushes it to
+# Builds the OneCorp custom Outline image and pushes it to
 # ghcr.io/onecorp-australia/outline so the Hostinger VPS can pull it.
 #
 # Triggers:

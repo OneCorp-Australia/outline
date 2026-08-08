@@ -6,8 +6,11 @@ This fork tracks [`outline/outline`](https://github.com/outline/outline) with a 
 
 | Change | File(s) | Why |
 |---|---|---|
-| Fireflies embed provider | `shared/editor/embeds/index.tsx`, `public/images/fireflies.png` | OneCorp uses Fireflies meeting recordings throughout the Sales KB. Adds auto-embed for `share.fireflies.ai/embed/meetings/...` URLs and `app.fireflies.ai/view/...` URLs. |
 | GHCR build workflow | `.github/workflows/build-ghcr.yml` | Builds and pushes a custom image to `ghcr.io/onecorp-australia/outline:latest` on every push to `main` and `feature/**` branches. The Hostinger VPS pulls from this registry. |
+
+There are currently no source-code changes from upstream — the fork exists purely to
+control how and where the image is built. Keeping it that way makes upstream merges
+trivial, so prefer configuration or a generic Outline feature over patching source.
 
 ## Image registry
 
@@ -15,7 +18,7 @@ This fork tracks [`outline/outline`](https://github.com/outline/outline) with a 
 - **Image:** `ghcr.io/onecorp-australia/outline`
 - **Tags:**
   - `latest` — the most recent build of the `main` branch
-  - `<branch-name>` — tip of each feature branch (e.g. `feature-fireflies-embed`)
+  - `<branch-name>` — tip of each feature branch (e.g. `feature-my-change`)
   - `<branch>-<sha7>` — immutable per-commit reference for rollback
 - **Visibility:** private (requires `read:packages` PAT to pull)
 
@@ -41,12 +44,23 @@ git remote add upstream https://github.com/outline/outline.git    # one-time
 git fetch upstream
 git checkout main
 git merge upstream/main     # or rebase, your call
-# Resolve any conflicts in shared/editor/embeds/index.tsx
 git push origin main
 ```
 
 GitHub Actions will rebuild and republish automatically on the push.
 
+## Embedding Fireflies recordings
+
+No dedicated Fireflies embed provider exists. Use Outline's built-in **Embed** block
+instead: insert an Embed block and paste the meeting URL. Two things to note —
+
+- Pasting a Fireflies link into a document on its own will **not** auto-convert to an
+  embed; the Embed block has to be inserted deliberately.
+- Paste the **share** URL (`share.fireflies.ai/embed/meetings/...`), not an
+  `app.fireflies.ai/view/...` link. The app URL is not frameable and will render blank.
+  The meeting also has to be share-enabled in Fireflies.
+
 ## Future plan
 
-The Fireflies embed is generally useful — it's been submitted as a PR to `outline/outline` upstream. If accepted, this fork can be dropped (revert the deployment to `outlinewiki/outline:latest`).
+If this fork ever carries no build-pipeline changes either, it can be dropped entirely
+and the deployment reverted to `outlinewiki/outline:latest`.
