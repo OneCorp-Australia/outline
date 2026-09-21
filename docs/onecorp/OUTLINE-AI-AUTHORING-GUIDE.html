@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OneCorp Outline AI Authoring and Import Guide</title>
+  </head>
+  <body>
+    <h1>OneCorp Outline AI Authoring and Import Guide</h1>
+
+    <p>
+      Give this file to any AI that is preparing an SOP, training article, sales
+      script, or instructional document for OneCorp’s Outline knowledge base.
+      The AI must follow the output contract below.
+    </p>
+
+    <div class="notice-block warning">
+      <div class="content">
+        <p>
+          <strong>Quick decision:</strong> use Markdown for an ordinary article.
+          Use standalone HTML whenever different highlight colours carry
+          meaning. Markdown can represent a generic highlight, but it cannot
+          retain the highlight colour.
+        </p>
+      </div>
+    </div>
+
+    <h2>1. Output contract for the AI</h2>
+
+    <ol>
+      <li>
+        Return one complete, import-ready file. Do not wrap the file in a code
+        fence and do not add an explanation before or after it.
+      </li>
+      <li>
+        Use a descriptive kebab-case filename, such as
+        <code>handling-price-objections.html</code> or
+        <code>new-starter-onboarding.md</code>.
+      </li>
+      <li>
+        Save text as UTF-8. Use Australian English unless instructed otherwise.
+      </li>
+      <li>
+        Preserve the supplied facts and meaning. Do not invent company policies,
+        steps, links, owners, timings, compliance claims, or customer promises.
+      </li>
+      <li>
+        Start a file being uploaded to Outline with exactly one H1 containing
+        the article title. Use H2, H3, and H4 for the body hierarchy; do not
+        skip heading levels.
+      </li>
+      <li>
+        When creating or updating a document directly through the OneCorp
+        Outline MCP or API, put the title in the separate title field. The
+        document body must not begin with an H1; start with introductory text or
+        an H2.
+      </li>
+      <li>
+        Keep formatting semantic and purposeful. Never use colour as the only
+        way to communicate meaning.
+      </li>
+    </ol>
+
+    <h2>2. Choose the output format</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Requirement</th>
+          <th>Use</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Normal SOP, policy, guide, checklist, or training article</td>
+          <td><strong>Markdown (.md)</strong></td>
+          <td>Portable, readable, and well supported by Outline.</td>
+        </tr>
+        <tr>
+          <td>One generic highlight colour only</td>
+          <td><strong>Markdown (.md)</strong></td>
+          <td>Outline supports <code>==highlighted text==</code>.</td>
+        </tr>
+        <tr>
+          <td>Several highlight colours with different meanings</td>
+          <td><strong>HTML (.html)</strong></td>
+          <td>HTML can carry Outline’s colour attribute on each highlight.</td>
+        </tr>
+        <tr>
+          <td>Direct AI creation through Outline MCP or API</td>
+          <td><strong>Markdown body</strong></td>
+          <td>
+            The title is passed separately; colour-specific marks are
+            unavailable.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Moving content between Outline workspaces without losing rich state
+          </td>
+          <td><strong>Outline JSON export</strong></td>
+          <td>Markdown export does not preserve highlight colours.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3. Outline-flavoured Markdown profile</h2>
+
+    <p>
+      Use Markdown when colour-specific highlighting is not required. Outline
+      supports standard Markdown plus several useful extensions.
+    </p>
+
+    <pre><code># Article title
+
+Introductory paragraph.
+
+## Main section
+
+### Subsection
+
+#### Detail
+
+**bold**
+_italic_
+__underline__
+~~strikethrough~~
+`inline code`
+==generic highlight==
+[descriptive link text](https://example.com)
+![useful image description](https://example.com/image.png)
+
+- Bulleted item
+- Another item
+
+1. First step
+2. Second step
+
+- [ ] Incomplete task
+- [x] Completed task
+
+&gt; A quotation or important excerpt.
+
+| Column one | Column two |
+| --- | --- |
+| Value | Value |
+
+---
+
+```javascript
+const example = "Use a fenced code block with a language";
+```
+
+Inline maths: $x = y$
+
+$$
+x = y + z
+$$
+
+:::info
+Useful context.
+:::
+
+:::success
+The correct or completed outcome.
+:::
+
+:::tip
+A practical tip.
+:::
+
+:::warning
+A risk, caution, or mandatory check.
+:::
+
++++
+Expandable heading
+
+Expandable content.
++++</code></pre>
+
+    <div class="notice-block warning">
+      <div class="content">
+        <p>
+          <strong>Markdown limitation:</strong> raw HTML is disabled when
+          Outline parses a Markdown file. Do not place
+          <code>&lt;mark&gt;</code>, styled <code>&lt;span&gt;</code>, or other
+          HTML inside a <code>.md</code> file to try to retain colours. Every
+          Markdown highlight is the same generic
+          <code>==highlight==</code> mark.
+        </p>
+      </div>
+    </div>
+
+    <h2>4. HTML profile for colour-critical documents</h2>
+
+    <p>
+      Use a standalone <code>.html</code> file when a sales script, training
+      guide, or other article relies on several highlight colours. Use only the
+      supported semantic elements shown here. Outline removes page-level styling
+      and imports the content into its own editor design.
+    </p>
+
+    <h3>Colour-specific highlight syntax</h3>
+
+    <pre><code>&lt;mark data-color="#FA551E"&gt;&lt;strong&gt;OBJECTION:&lt;/strong&gt; “It costs too much.”&lt;/mark&gt;
+
+&lt;mark data-color="#B4DC19"&gt;&lt;strong&gt;RESPONSE:&lt;/strong&gt; Acknowledge the concern, then clarify the value.&lt;/mark&gt;
+
+&lt;mark data-color="#3CBEFC"&gt;&lt;strong&gt;COACH NOTE:&lt;/strong&gt; Pause and let the customer answer.&lt;/mark&gt;</code></pre>
+
+    <p>
+      The <code>data-color</code> value is the part Outline uses. It must be a
+      hex colour. Use the approved palette below for consistency and reliable
+      editing in Outline.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Outline colour</th>
+          <th>Hex</th>
+          <th>Default OneCorp meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Sunset</td>
+          <td><code>#FA551E</code></td>
+          <td>
+            <mark data-color="#FA551E"><strong>OBJECTION / RISK</strong></mark>
+          </td>
+        </tr>
+        <tr>
+          <td>Smoothie</td>
+          <td><code>#B4DC19</code></td>
+          <td>
+            <mark data-color="#B4DC19"><strong>RESPONSE / ACTION</strong></mark>
+          </td>
+        </tr>
+        <tr>
+          <td>Neon</td>
+          <td><code>#3CBEFC</code></td>
+          <td>
+            <mark data-color="#3CBEFC"
+              ><strong>COACH NOTE / CONTEXT</strong></mark
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Apricot</td>
+          <td><code>#FED46A</code></td>
+          <td>
+            <mark data-color="#FED46A"><strong>CAUTION / VERIFY</strong></mark>
+          </td>
+        </tr>
+        <tr>
+          <td>Bubblegum</td>
+          <td><code>#C8AFF0</code></td>
+          <td>
+            <mark data-color="#C8AFF0"
+              ><strong>ESCALATE / SPECIALIST</strong></mark
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Coral</td>
+          <td><code>#FDEA9B</code></td>
+          <td>
+            <mark data-color="#FDEA9B"
+              ><strong>CUSTOMER WORDS / EXAMPLE</strong></mark
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      A legend supplied for a particular document overrides this default
+      mapping. State the legend near the beginning of every colour-coded
+      article. Include a visible label such as <strong>OBJECTION:</strong> or
+      <strong>RESPONSE:</strong> inside each highlighted passage so the article
+      is still understandable to people who cannot distinguish the colours.
+    </p>
+
+    <h3>Reliable HTML patterns</h3>
+
+    <pre><code>&lt;!doctype html&gt;
+&lt;html lang="en-AU"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;Article title&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Article title&lt;/h1&gt;
+    &lt;p&gt;Introductory paragraph with &lt;strong&gt;bold&lt;/strong&gt;,
+      &lt;em&gt;italic&lt;/em&gt;, &lt;u&gt;underline&lt;/u&gt;,
+      &lt;del&gt;strikethrough&lt;/del&gt;, and &lt;code&gt;inline code&lt;/code&gt;.&lt;/p&gt;
+
+    &lt;h2&gt;Main section&lt;/h2&gt;
+    &lt;h3&gt;Subsection&lt;/h3&gt;
+    &lt;h4&gt;Detail&lt;/h4&gt;
+
+    &lt;p&gt;&lt;a href="https://example.com"&gt;Descriptive link text&lt;/a&gt;&lt;/p&gt;
+    &lt;img src="https://example.com/image.png" alt="Useful image description" /&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Bulleted item&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;ol&gt;
+      &lt;li&gt;First step&lt;/li&gt;
+    &lt;/ol&gt;
+
+    &lt;ul class="checkbox_list"&gt;
+      &lt;li data-type="checkbox_item"&gt;&lt;p&gt;Incomplete task&lt;/p&gt;&lt;/li&gt;
+      &lt;li data-type="checkbox_item" class="checked"&gt;&lt;p&gt;Completed task&lt;/p&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;blockquote&gt;&lt;p&gt;A quotation or important excerpt.&lt;/p&gt;&lt;/blockquote&gt;
+    &lt;hr /&gt;
+
+    &lt;table&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;&lt;th&gt;Situation&lt;/th&gt;&lt;th&gt;Response&lt;/th&gt;&lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;&lt;td&gt;Example&lt;/td&gt;&lt;td&gt;Action&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;div class="notice-block warning"&gt;
+      &lt;div class="content"&gt;
+        &lt;p&gt;&lt;strong&gt;Warning:&lt;/strong&gt; Complete the compliance check.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div data-type="container_toggle"&gt;
+      &lt;p&gt;&lt;strong&gt;Expandable heading&lt;/strong&gt;&lt;/p&gt;
+      &lt;p&gt;Expandable supporting content.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="code-block" data-language="javascript"&gt;
+      &lt;pre&gt;&lt;code&gt;const example = "code";
+console.log(example);&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+    <p>
+      Notice styles are <code>info</code>, <code>success</code>,
+      <code>tip</code>, and <code>warning</code>. Replace the second class on
+      <code>notice-block</code> to choose the meaning.
+    </p>
+
+    <h3>Do not generate</h3>
+
+    <ul>
+      <li>
+        JavaScript, scripts, forms, iframes, or interactive page behaviour.
+      </li>
+      <li>
+        CSS files, <code>&lt;style&gt;</code> blocks, layout systems, custom
+        fonts, or decorative page design.
+      </li>
+      <li>
+        Foreground text colours. Outline supports background highlights, not a
+        general coloured-font mark.
+      </li>
+      <li>
+        Colour meaning without a written label and a legend in the document.
+      </li>
+      <li>
+        Unsupported custom widgets or copied Word layout such as floating text
+        boxes, columns, page headers, footers, and precise pagination.
+      </li>
+    </ul>
+
+    <h2>5. Working with Microsoft Word documents</h2>
+
+    <p>
+      A <code>.docx</code> file is acceptable source material and Outline can
+      import it, but Word and Outline use different document models. Treat Word
+      import as a semantic conversion, not a pixel-perfect transfer. Headings,
+      paragraphs, lists, links, tables, images, and common emphasis are the most
+      reliable. Precise colours, layout, fonts, text boxes, and other decorative
+      formatting may be changed or lost.
+    </p>
+
+    <ol>
+      <li>Give the original Word file to the AI.</li>
+      <li>
+        Tell it whether the result is a normal article or a colour-critical
+        article and provide the intended colour legend in words.
+      </li>
+      <li>
+        For a colour-critical article, require standalone HTML using
+        <code>&lt;mark data-color="#HEX"&gt;</code>. Do not ask for Markdown or
+        rely on direct Word import to retain the colours.
+      </li>
+      <li>
+        Compare the generated article with the Word original side by side. Check
+        that no instruction, qualification, objection, response, warning, or
+        compliance wording has moved or changed category.
+      </li>
+    </ol>
+
+    <h2>6. Features to add inside Outline after import</h2>
+
+    <p>
+      Add these with Outline’s editor after the article has been imported. An
+      external Markdown or HTML file cannot safely recreate their workspace
+      state or permissions:
+    </p>
+
+    <ul>
+      <li>mentions of Outline users, groups, collections, or documents;</li>
+      <li>live Embed blocks and provider-specific media;</li>
+      <li>uploaded file attachments and videos;</li>
+      <li>diagrams and editable Mermaid or diagrams.net content;</li>
+      <li>comments and collaborative suggestions; and</li>
+      <li>template placeholders and workspace template variables.</li>
+    </ul>
+
+    <h2>7. Import into Outline</h2>
+
+    <ol>
+      <li>Open the destination collection or parent document in Outline.</li>
+      <li>
+        Drag the <code>.md</code> or <code>.html</code> file into the
+        collection, or use the document menu and choose
+        <strong>Import document</strong>.
+      </li>
+      <li>
+        Open the imported article and complete the quality checks below before
+        publishing or sharing it.
+      </li>
+    </ol>
+
+    <h2>8. Required quality checks</h2>
+
+    <ul class="checkbox_list">
+      <li data-type="checkbox_item">
+        <p>The title is correct and not repeated in the body.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Heading levels form a logical outline.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Steps and checklist items remain in the correct order.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Every link opens the intended destination.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Images appear and have useful alternative text.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Tables remain readable on a narrow screen.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Notices and toggles imported as native Outline blocks.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Every colour matches the article’s visible legend.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Every coloured passage also has a written category label.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>Critical wording matches the approved source.</p>
+      </li>
+      <li data-type="checkbox_item">
+        <p>
+          Native-only mentions, embeds, attachments, or diagrams have been
+          added.
+        </p>
+      </li>
+    </ul>
+
+    <h2>9. Reusable staff prompt</h2>
+
+    <pre><code>Follow the attached “OneCorp Outline AI Authoring and Import Guide”.
+
+Convert the attached source material into an import-ready Outline article.
+
+Article purpose: [state the purpose]
+Audience: [state the audience]
+Required filename: [optional]
+Output format: [choose Markdown, HTML, or “choose using the guide”]
+Colour legend: [provide the mapping, or write “use the guide’s default”]
+Special requirements: [state any mandatory sections, wording, links, or checks]
+
+Preserve the source facts and meaning. Do not invent missing company information. Return only the complete file contents with no introduction, explanation, or code fence. Before responding, silently apply every quality check in the guide.</code></pre>
+
+    <div class="notice-block info">
+      <div class="content">
+        <p>
+          <strong>Final rule:</strong> if the article’s meaning depends on
+          several colours, the deliverable is HTML. If it does not, prefer
+          Markdown.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
